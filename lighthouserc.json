@@ -4,8 +4,8 @@
       "staticDistDir": "./dist",
       "url": [
         "http://localhost/index.html",
-        "http://localhost/case-studies/index.html",
-        "http://localhost/case-studies/hidden-attribution/index.html"
+        "http://localhost/legal/privacy/index.html",
+        "http://localhost/legal/terms/index.html"
       ],
       "numberOfRuns": 1,
       "settings": {
