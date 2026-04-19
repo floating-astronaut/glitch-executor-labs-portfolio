@@ -1,10 +1,10 @@
 ---
 import Base from '~/layouts/Base.astro';
-import { site } from '~/lib/site';
+import { site, legalEntity } from '~/lib/site';
 const updated = '2026-04-19';
 ---
 
-<Base title="Terms" description="Terms of use for Glitch Executor." pageType="WebPage">
+<Base title="Terms" description="Terms of use for Glitch Executor Labs." pageType="WebPage">
   <section class="container-app py-20 max-w-prose-tight">
     <p class="eyebrow">Legal</p>
     <h1 class="mt-4">Terms of Use</h1>
@@ -12,36 +12,77 @@ const updated = '2026-04-19';
 
     <div class="prose mt-10 text-muted [&_h2]:text-fg [&_h2]:mt-10 [&_h2]:mb-3 [&_h2]:text-fluid-xl [&_p]:my-3 [&_strong]:text-fg [&_ul]:list-disc [&_ul]:pl-6 [&_li]:my-1.5 [&_a]:text-brand">
       <p>
-        By accessing {site.domain}, you agree to these terms. The site is
-        operated by {site.parent}. Nothing on this site constitutes a binding
-        offer or professional advice; it's marketing.
+        {site.parent} is a brand of <strong>{legalEntity.name}</strong>, a
+        {legalEntity.type.toLowerCase()} owned by {legalEntity.owner} at
+        {legalEntity.address}. By accessing {site.domain} you agree to
+        these Terms. This page covers <em>only the portfolio site itself</em> —
+        each sub-brand (Glitch Trade, Glitch Edge, Glitch Grow) ships its own
+        product-specific Terms covering subscription fees, API usage, data
+        processing, and dispute resolution for that product.
       </p>
 
-      <h2>Marks &amp; content</h2>
+      <h2>1. Informational site</h2>
       <p>
-        "Glitch Executor", "Glitch Trade", "Glitch Edge", "Glitch Grow", the
-        cobra mascot, and related marks are property of {site.parent}. Copy and
-        screenshots are copyrighted and cannot be reproduced commercially
-        without written permission.
+        This site is informational. It does not sell products or services
+        directly; the sub-brand subdomains do. Nothing on this site is an
+        offer, a recommendation, or advice of any kind.
       </p>
 
-      <h2>Sub-brand sites</h2>
+      <h2>2. Marks &amp; content</h2>
       <p>
-        Trade, Edge, and Grow each operate under their own subdomain and ship
-        their own terms covering product-specific commitments (pilot refunds,
-        API usage, data residency). Terms here cover only the portfolio site
-        itself.
+        "Glitch Executor Labs", "Glitch Trade", "Glitch Edge", "Glitch Grow",
+        {legalEntity.name}, the cobra mascot, and related marks are property
+        of {legalEntity.name}. Copy, screenshots, and visual assets are
+        copyrighted and cannot be reproduced commercially without written
+        permission.
       </p>
 
-      <h2>Warranties</h2>
+      <h2>3. Third-party links</h2>
       <p>
-        The site is provided as-is. Historical performance of client engagements
-        is not a guarantee of future results for your account.
+        Links from this site to <code>trade.glitchexecutor.com</code>,
+        <code>edge.glitchexecutor.com</code>, <code>grow.glitchexecutor.com</code>,
+        the GitHub repos listed, and external resources are provided for
+        convenience. Each destination carries its own terms and privacy
+        policy; we are not responsible for third-party content.
       </p>
 
-      <h2>Contact</h2>
+      <h2>4. Warranties</h2>
       <p>
-        Legal notices: <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>.
+        The site is provided <em>as-is</em> and <em>as-available</em>,
+        without warranties of any kind. Historical performance of client
+        engagements on the sub-brand sites is not a guarantee of future
+        results for your account.
+      </p>
+
+      <h2>5. Limitation of liability</h2>
+      <p>
+        To the maximum extent permitted by applicable law, {legalEntity.name}
+        is not liable for any indirect, incidental, consequential, special,
+        exemplary, or punitive damages arising from use of this site.
+      </p>
+
+      <h2>6. Governing law &amp; dispute resolution</h2>
+      <p>
+        These Terms are governed by the laws of the
+        <strong>{legalEntity.jurisdiction}</strong> and the federal laws of
+        Canada applicable therein. Any dispute arising out of this site
+        shall be finally resolved by <strong>binding arbitration</strong>
+        administered by <strong>{legalEntity.arbitrationRules}</strong>,
+        seated in <strong>{legalEntity.arbitrationSeat}</strong>, by a
+        single arbitrator, in English. Nothing overrides non-waivable
+        consumer rights under Ontario's Consumer Protection Act, 2002 or
+        equivalent applicable law.
+      </p>
+
+      <h2>7. Contact</h2>
+      <p>
+        <a href={`mailto:${legalEntity.email}`}>{legalEntity.email}</a>
+      </p>
+      <p class="font-mono text-fluid-sm">
+        {legalEntity.name}<br/>
+        Attention: {legalEntity.owner}<br/>
+        {legalEntity.address}<br/>
+        Tel: {legalEntity.phone}
       </p>
     </div>
   </section>

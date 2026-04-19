@@ -1,10 +1,10 @@
 ---
 import Base from '~/layouts/Base.astro';
-import { site } from '~/lib/site';
+import { site, legalEntity } from '~/lib/site';
 const updated = '2026-04-19';
 ---
 
-<Base title="Privacy" description="How Glitch Executor collects, stores, and uses data." pageType="WebPage">
+<Base title="Privacy" description="How Glitch Executor Labs collects, stores, and uses data." pageType="WebPage">
   <section class="container-app py-20 max-w-prose-tight">
     <p class="eyebrow">Legal</p>
     <h1 class="mt-4">Privacy Policy</h1>
@@ -12,39 +12,75 @@ const updated = '2026-04-19';
 
     <div class="prose mt-10 text-muted [&_h2]:text-fg [&_h2]:mt-10 [&_h2]:mb-3 [&_h2]:text-fluid-xl [&_p]:my-3 [&_strong]:text-fg [&_ul]:list-disc [&_ul]:pl-6 [&_li]:my-1.5 [&_a]:text-brand">
       <p>
-        Glitch Executor is the holding brand for Glitch Trade, Glitch Edge, and
-        Glitch Grow. This policy covers data collected through {site.domain}
-        (the portfolio site). Each sub-brand site carries its own privacy
+        {site.parent} is a brand of <strong>{legalEntity.name}</strong>, a
+        {legalEntity.type.toLowerCase()} owned by {legalEntity.owner} at
+        {legalEntity.address}. This policy covers personal data collected
+        through {site.domain} (the portfolio site). Each sub-brand site
+        (Glitch Trade, Glitch Edge, Glitch Grow) publishes its own privacy
         policy for product-level data processing.
       </p>
 
       <h2>What we collect</h2>
       <ul>
         <li><strong>Contact form submissions</strong> — name, email, company, and the message you send us. Stored in encrypted Postgres.</li>
-        <li><strong>Aggregate analytics</strong> — page views, referrers, device type. No cookies, no fingerprinting, no IP-to-user resolution.</li>
-        <li><strong>Turnstile challenge data</strong> — processed by Cloudflare under their privacy terms. We receive only pass/fail.</li>
+        <li><strong>Aggregate analytics</strong> — page views, referrers, device type. No cookies, no cross-site tracking, no fingerprinting.</li>
+        <li><strong>Turnstile challenge data</strong> — processed by Cloudflare; we receive only pass/fail.</li>
+        <li><strong>Server logs</strong> — IP, timestamp, path, retained up to 30 days for security.</li>
       </ul>
 
       <h2>What we don't do</h2>
       <ul>
-        <li>No cross-site tracking.</li>
-        <li>No selling of data to third parties.</li>
-        <li>No advertising cookies.</li>
-        <li>No enrichment of your form submission against third-party databases.</li>
+        <li>No cross-site tracking, advertising cookies, or ad-tech pixels.</li>
+        <li>No selling or licensing of personal data to third parties.</li>
+        <li>No enrichment of your form submission against third-party data brokers.</li>
+        <li>No data collection from anyone we know to be under 18.</li>
       </ul>
 
-      <h2>How to reach us</h2>
+      <h2>Sub-processors</h2>
+      <ul>
+        <li><strong>Cloudflare, Inc.</strong> — site delivery, WAF, Turnstile, Pages hosting.</li>
+        <li><strong>Primary database hosting</strong> — Postgres-compatible, encrypted at rest, located in <strong>{legalEntity.dataStorageRegion}</strong>.</li>
+      </ul>
+
+      <h2>International transfers</h2>
       <p>
-        For data access, correction, or deletion requests, email
-        <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>.
-        We respond within 30 days.
+        Our primary database is located in {legalEntity.dataStorageRegion}.
+        Because the controller ({legalEntity.name}) is based in
+        {legalEntity.jurisdiction}, personal data may be transferred from
+        Canada to the United States and subject to U.S. law. For non-Canadian
+        users, transfers rely on SCCs (EU), UK IDTA, adequacy decisions,
+        UAE PDPL Art. 22, or India DPDPA §16 where applicable.
+      </p>
+
+      <h2>Your rights</h2>
+      <p>
+        You may have rights to access, rectify, erase, restrict, port,
+        object, or withdraw consent regarding your personal data, and to
+        complain to your data-protection authority — including the
+        <strong>Office of the Privacy Commissioner of Canada</strong>
+        (<a href="https://www.priv.gc.ca" rel="noopener">priv.gc.ca</a>) and
+        the Information and Privacy Commissioner of Ontario. Submit
+        requests to
+        <a href={`mailto:${legalEntity.email}`}>{legalEntity.email}</a>; we
+        verify identity before actioning.
       </p>
 
       <h2>Client engagements</h2>
       <p>
-        When we run services for a client through Glitch Trade, Glitch Edge, or
-        Glitch Grow, data processing is governed by the signed MSA / DPA — not
-        this page. Ask your account contact for the applicable agreement.
+        When we provide tools under a signed Master Services Agreement or
+        Data Processing Addendum through any sub-brand, that agreement
+        governs. Ask your account contact for the applicable agreement.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        <a href={`mailto:${legalEntity.email}`}>{legalEntity.email}</a>
+      </p>
+      <p class="font-mono text-fluid-sm">
+        {legalEntity.name}<br/>
+        Attention: {legalEntity.owner}<br/>
+        {legalEntity.address}<br/>
+        Tel: {legalEntity.phone}
       </p>
     </div>
   </section>
