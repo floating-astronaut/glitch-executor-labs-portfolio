@@ -29,11 +29,11 @@ Glitch Trade (AI trading), Glitch Edge (betting), and Glitch Grow
 
 ## Related repos
 
-- [glitch-trading-core](https://github.com/glitch-exec-labs/glitch-trading-core)
+- [glitch-trade-core](https://github.com/glitch-exec-labs/glitch-trade-core)
 - [glitch-grow-site](https://github.com/glitch-exec-labs/glitch-grow-site) — Astro template this was built from
 - [glitch-edge-site](https://github.com/glitch-exec-labs/glitch-edge-site)
 - [glitch-exec-labs-profile](https://github.com/glitch-exec-labs/.github) — GitHub org profile
-- [glitch-brand-assets](https://github.com/glitch-exec-labs/glitch-brand-assets)
+- [glitch-executor-labs-brand-assets](https://github.com/glitch-exec-labs/glitch-executor-labs-brand-assets)
 
 ## Brand note
 
