@@ -1,7 +1,7 @@
-# Glitch Executor Portfolio
+# Glitch Executor Labs Portfolio
 
-Master portfolio site for **Glitch Executor** — the holding brand behind
-Glitch Trade (AI trading), Glitch Edge (sports intelligence), and Glitch Grow
+Master portfolio site for **Glitch Executor Labs** — the root brand behind
+Glitch Trade (AI trading), Glitch Edge (betting), and Glitch Grow
 (AI digital marketing).
 
 ## What it is
