@@ -11,9 +11,12 @@
  * Env (wire in Cloudflare Pages dashboard):
  *   TURNSTILE_SECRET      — Turnstile secret key (required in prod).
  *   RESEND_API_KEY        — Resend API key. When set, sends the message to RESEND_TO.
- *   RESEND_FROM           — optional; default 'Glitch Executor Labs <support@glitchexecutor.com>'.
+ *   RESEND_FROM           — optional override; default uses the per-site BRAND
+ *                           from _email.ts, i.e. '<Brand> <support@glitchexecutor.com>'.
  *                           Must be an address on a domain verified in your Resend account.
- *   RESEND_TO             — optional; default 'support@glitchexecutor.com'.
+ *   RESEND_TO             — optional override; default = BRAND.supportEmail.
+ *   RESEND_AUTOREPLY      — when set to "true", also sends the submitter a
+ *                           branded thank-you email. Off by default.
  *   SLACK_WEBHOOK_URL     — optional; POSTs a formatted Block Kit message.
  *   CONTACT_FORWARD_URL   — optional; POSTs raw JSON to any endpoint.
  *
@@ -21,26 +24,30 @@
  * free-tier CPU budget on a cold start.
  */
 
+import {
+  BRAND,
+  renderNotification,
+  renderAutoReply,
+  type ContactPayload,
+  type RequestContext,
+  type RenderedEmail,
+} from '../_email';
+
 export interface Env {
   TURNSTILE_SECRET?: string;
   RESEND_API_KEY?: string;
   RESEND_FROM?: string;
   RESEND_TO?: string;
+  RESEND_AUTOREPLY?: string;
   SLACK_WEBHOOK_URL?: string;
   CONTACT_FORWARD_URL?: string;
 }
 
-interface Payload {
-  name: string;
-  email: string;
-  company: string;
-  message: string;
+interface FormFields extends ContactPayload {
   token: string;
 }
 
 const MAX_LEN = { name: 200, email: 200, company: 200, message: 4000 } as const;
-const DEFAULT_FROM = 'Glitch Executor Labs <support@glitchexecutor.com>';
-const DEFAULT_TO   = 'support@glitchexecutor.com';
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const contentType = request.headers.get('content-type') ?? '';
@@ -58,7 +65,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return json({ ok: true }, 200);
   }
 
-  const payload: Payload = {
+  const payload: FormFields = {
     name:    clean(form.get('name'),    MAX_LEN.name),
     email:   clean(form.get('email'),   MAX_LEN.email),
     company: clean(form.get('company'), MAX_LEN.company),
@@ -116,79 +123,54 @@ async function verifyTurnstile(token: string, secret: string, ip: string): Promi
   return data.success === true;
 }
 
-async function forward(p: Payload, env: Env, req: Request): Promise<void> {
+async function forward(p: FormFields, env: Env, req: Request): Promise<void> {
   const ref = req.headers.get('referer') ?? '';
   const ua  = req.headers.get('user-agent') ?? '';
   const ip  = clientIp(req);
   const ts  = new Date().toISOString();
 
   // Derive a site label for subject lines: prefer the hostname from the
-  // Referer header (the origin the form was submitted from), fall back to
-  // the request's Host header.
-  let site = 'glitchexecutor.com';
+  // Referer header, fall back to the request's Host header, fall back to
+  // the BRAND's configured siteUrl host.
+  let site = BRAND.siteUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
   try {
     if (ref) site = new URL(ref).hostname;
     else site = (req.headers.get('host') || '').replace(/^www\./, '') || site;
   } catch { /* ignore bad referer */ }
 
+  const ctx: RequestContext = { ip, ua, ref, ts, site };
+  const contactData: ContactPayload = {
+    name:    p.name,
+    email:   p.email,
+    company: p.company,
+    message: p.message,
+  };
+
   const tasks: Promise<unknown>[] = [];
 
-  // ── Resend: send the message as an email to RESEND_TO ──────────────────
+  // ── Resend: branded admin notification + optional auto-reply ───────────
   if (env.RESEND_API_KEY) {
-    const from = env.RESEND_FROM || DEFAULT_FROM;
-    const to   = env.RESEND_TO   || DEFAULT_TO;
+    const defaultFrom = `${BRAND.name} <${BRAND.supportEmail}>`;
+    const from = env.RESEND_FROM || defaultFrom;
+    const to   = env.RESEND_TO   || BRAND.supportEmail;
 
-    const subject = `[${site}] New contact from ${p.name}`;
-    const plain =
-`New contact from ${site}
-
-Name:     ${p.name}
-Email:    ${p.email}
-Company:  ${p.company || '—'}
-IP:       ${ip || '—'}
-UA:       ${ua || '—'}
-Referer:  ${ref || '—'}
-Received: ${ts}
-
-Message:
-${p.message}
-`;
-    const html =
-`<!DOCTYPE html><html><body style="margin:0;padding:0;background:#f6f7f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#0a0a0f;">
-  <div style="max-width:600px;margin:0 auto;padding:24px;">
-    <h2 style="margin:0 0 8px 0;font-size:18px;border-bottom:2px solid #00ff88;padding-bottom:8px;">New contact from ${esc(site)}</h2>
-    <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;">
-      <tr><td style="padding:6px 0;width:110px;color:#6b7280;">Name</td><td style="padding:6px 0;">${esc(p.name)}</td></tr>
-      <tr><td style="padding:6px 0;color:#6b7280;">Email</td><td style="padding:6px 0;"><a href="mailto:${esc(p.email)}" style="color:#0088ff;">${esc(p.email)}</a></td></tr>
-      <tr><td style="padding:6px 0;color:#6b7280;">Company</td><td style="padding:6px 0;">${esc(p.company || '—')}</td></tr>
-    </table>
-    <h3 style="margin:24px 0 8px 0;font-size:14px;color:#6b7280;text-transform:uppercase;letter-spacing:.04em;">Message</h3>
-    <div style="padding:12px;background:#fff;border:1px solid #e5e7eb;border-radius:6px;white-space:pre-wrap;font-size:14px;line-height:1.55;">${esc(p.message)}</div>
-    <hr style="margin:24px 0;border:none;border-top:1px solid #e5e7eb;">
-    <p style="color:#9ca3af;font-size:11px;line-height:1.5;margin:0;">
-      IP: ${esc(ip || '—')}<br>
-      UA: ${esc(ua || '—')}<br>
-      Referer: ${esc(ref || '—')}<br>
-      Received: ${esc(ts)}
-    </p>
-  </div>
-</body></html>`;
-
-    tasks.push(fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${env.RESEND_API_KEY}`,
-        'Content-Type':  'application/json',
-      },
-      body: JSON.stringify({
-        from,
-        to: [to],
-        reply_to: p.email,
-        subject,
-        text: plain,
-        html,
-      }),
+    const notification = renderNotification(contactData, ctx);
+    tasks.push(sendEmail(env.RESEND_API_KEY, {
+      from,
+      to: [to],
+      reply_to: p.email,
+      ...notification,
     }));
+
+    if (env.RESEND_AUTOREPLY === 'true') {
+      const auto = renderAutoReply(contactData);
+      tasks.push(sendEmail(env.RESEND_API_KEY, {
+        from,
+        to: [p.email],
+        reply_to: BRAND.supportEmail,
+        ...auto,
+      }));
+    }
   }
 
   // ── Slack webhook (optional) ───────────────────────────────────────────
@@ -225,6 +207,21 @@ ${p.message}
   await Promise.allSettled(tasks);
 }
 
+function sendEmail(apiKey: string, payload: {
+  from: string;
+  to: string[];
+  reply_to?: string;
+} & RenderedEmail): Promise<Response> {
+  return fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type':  'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+}
+
 function clientIp(req: Request): string {
   return req.headers.get('cf-connecting-ip')
       ?? req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
@@ -236,14 +233,4 @@ function json(data: unknown, status = 200): Response {
     status,
     headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' },
   });
-}
-
-function esc(s: string): string {
-  return String(s).replace(/[&<>"']/g, (c) => (
-    c === '&' ? '&amp;' :
-    c === '<' ? '&lt;'  :
-    c === '>' ? '&gt;'  :
-    c === '"' ? '&quot;' :
-                '&#39;'
-  ));
 }
