@@ -1,7 +1,7 @@
 ---
 import '~/styles/global.css';
 import { ViewTransitions } from 'astro:transitions';
-import { site } from '~/lib/site';
+import { site, legalEntity } from '~/lib/site';
 import Nav from '~/components/Nav.astro';
 import Footer from '~/components/Footer.astro';
 import JsonLd from '~/components/JsonLd.astro';
@@ -36,13 +36,27 @@ const ogImage = image
     ? new URL(`/api/og/${ogSlug}.png`, site.url).toString()
     : new URL(site.ogImage, site.url).toString();
 
+// Organization schema — surfaces both the public brand (`name`) and the legal
+// operating entity (`legalName`) so third-party reviewers (Amazon Ads Partner
+// Network, Meta Business Verification, etc.) can match the company name on
+// their side to this website via W3C-standard structured data.
 const orgLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: site.parent,
+  legalName: legalEntity.name,
+  alternateName: [legalEntity.name],
   url: 'https://glitchexecutor.com',
   logo: new URL('/assets/brand/icon-512.png', site.url).toString(),
   sameAs: ['https://github.com/glitch-exec-labs'],
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '77 Huntley St',
+    addressLocality: 'Toronto',
+    addressRegion: 'ON',
+    postalCode: 'M4Y 2P3',
+    addressCountry: 'CA',
+  },
   contactPoint: [{
     '@type': 'ContactPoint',
     email: site.contactEmail,

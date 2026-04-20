@@ -1,5 +1,5 @@
 ---
-import { legalNav, site, subBrands } from '~/lib/site';
+import { legalNav, site, subBrands, legalEntity } from '~/lib/site';
 import Icon from './Icon.astro';
 
 const year = new Date().getFullYear();
@@ -17,6 +17,10 @@ const year = new Date().getFullYear();
       </p>
       <p class="text-subtle text-fluid-xs mt-4">
         Holding company for Glitch Trade, Glitch Edge, and Glitch Grow.
+      </p>
+      <p class="text-subtle text-fluid-xs mt-2">
+        {site.parent} is the trading name of <strong class="text-muted">{legalEntity.name}</strong>,
+        a {legalEntity.type.toLowerCase()} registered in {legalEntity.jurisdiction}.
       </p>
     </div>
 
@@ -53,7 +57,7 @@ const year = new Date().getFullYear();
   </div>
 
   <div class="container-app flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-10 text-fluid-xs text-subtle">
-    <p>© {year} {site.parent}. All rights reserved.</p>
+    <p>© {year} {legalEntity.name} · trading as {site.parent}. All rights reserved.</p>
     <p class="font-mono">Built on Astro · Deployed on Cloudflare</p>
   </div>
 </footer>
