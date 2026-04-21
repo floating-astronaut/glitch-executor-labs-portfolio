@@ -1,16 +1,19 @@
 ---
-// Privacy-friendly analytics loader. Provider selected at build time via env.
-// - PUBLIC_ANALYTICS_PROVIDER=plausible|umami   (empty or unset → render nothing)
-// - PUBLIC_ANALYTICS_DOMAIN=glitchexecutor.com  (Plausible)
-// - PUBLIC_UMAMI_WEBSITE_ID=xxxxxxxx   (Umami)
-// - PUBLIC_UMAMI_SRC=https://cloud.umami.is/script.js  (Umami, optional override)
+// Analytics loader. Provider selected at build time via env.
+// - PUBLIC_ANALYTICS_PROVIDER=plausible|umami|ga4   (empty or unset → render nothing)
+// - PUBLIC_ANALYTICS_DOMAIN=trade.glitchexecutor.com (Plausible)
+// - PUBLIC_UMAMI_WEBSITE_ID=xxxxxxxx                 (Umami)
+// - PUBLIC_UMAMI_SRC=https://cloud.umami.is/script.js (Umami, optional override)
+// - PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX            (GA4)
 //
-// No cookies. No PII. Loaded with `defer` + `data-*` config for either vendor.
+// Plausible / Umami are cookieless. GA4 sets cookies and shares with Google —
+// if GA4 is enabled, the Privacy Policy should disclose it.
 
 const provider = import.meta.env.PUBLIC_ANALYTICS_PROVIDER ?? '';
 const domain   = import.meta.env.PUBLIC_ANALYTICS_DOMAIN ?? '';
 const umamiId  = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID ?? '';
 const umamiSrc = import.meta.env.PUBLIC_UMAMI_SRC ?? 'https://cloud.umami.is/script.js';
+const gaId     = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? '';
 ---
 
 {provider === 'plausible' && domain && (
@@ -19,4 +22,16 @@ const umamiSrc = import.meta.env.PUBLIC_UMAMI_SRC ?? 'https://cloud.umami.is/scr
 
 {provider === 'umami' && umamiId && (
   <script defer data-website-id={umamiId} src={umamiSrc} is:inline></script>
+)}
+
+{provider === 'ga4' && gaId && (
+  <>
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} is:inline></script>
+    <script is:inline define:vars={{ gaId }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', gaId);
+    </script>
+  </>
 )}
