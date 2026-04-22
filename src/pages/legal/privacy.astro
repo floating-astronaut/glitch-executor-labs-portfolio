@@ -23,14 +23,14 @@ const updated = '2026-04-19';
       <h2>What we collect</h2>
       <ul>
         <li><strong>Contact form submissions</strong> — name, email, company, and the message you send us. Stored in encrypted Postgres.</li>
-        <li><strong>Aggregate analytics</strong> — page views, referrers, device type. No cookies, no cross-site tracking, no fingerprinting.</li>
+        <li><strong>Analytics</strong> — page views, referrers, device type, and approximate (city-level) location. When Google Analytics 4 is enabled on a site, it sets first-party cookies (<code>_ga</code>, <code>_ga_&lt;ID&gt;</code>) and sends pseudonymous event data to Google (acting as our processor). No device fingerprinting, no cross-site ad retargeting.</li>
         <li><strong>Turnstile challenge data</strong> — processed by Cloudflare; we receive only pass/fail.</li>
         <li><strong>Server logs</strong> — IP, timestamp, path, retained up to 30 days for security.</li>
       </ul>
 
       <h2>What we don't do</h2>
       <ul>
-        <li>No cross-site tracking, advertising cookies, or ad-tech pixels.</li>
+        <li>No advertising cookies beyond the Google Analytics cookies noted in §2. No remarketing pixels, no cross-site ad tracking, no Meta / TikTok / LinkedIn / Criteo ad-tech pixels.</li>
         <li>No selling or licensing of personal data to third parties.</li>
         <li>No enrichment of your form submission against third-party data brokers.</li>
         <li>No data collection from anyone we know to be under 18.</li>
@@ -39,6 +39,7 @@ const updated = '2026-04-19';
       <h2>Sub-processors</h2>
       <ul>
         <li><strong>Cloudflare, Inc.</strong> — site delivery, WAF, Turnstile, Pages hosting.</li>
+        <li><strong>Google Ireland Limited / Google LLC</strong> — Google Analytics 4 (GA4) pageview and event telemetry. Data is processed in Google's US and EU infrastructure under their Google Ads Data Processing Terms.</li>
         <li><strong>Primary database hosting</strong> — Postgres-compatible, encrypted at rest, located in <strong>{legalEntity.dataStorageRegion}</strong>.</li>
       </ul>
 
@@ -49,7 +50,7 @@ const updated = '2026-04-19';
         {legalEntity.jurisdiction}, personal data may be transferred from
         Canada to the United States and subject to U.S. law. For non-Canadian
         users, transfers rely on SCCs (EU), UK IDTA, adequacy decisions,
-        UAE PDPL Art. 22, or India DPDPA §16 where applicable.
+        UAE PDPL Art. 22, or India DPDPA §16 where applicable. Separately, when Google Analytics 4 is enabled, pageview and event data flow directly from visitors' browsers to Google servers in the US and EU under Google's own transfer mechanisms (Google's SCCs + Supplementary Measures).
       </p>
 
       <h2>Your rights</h2>
