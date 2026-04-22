@@ -1,4 +1,5 @@
 ---
+const gtmId = import.meta.env.PUBLIC_GTM_CONTAINER_ID ?? '';
 import '~/styles/global.css';
 import { ViewTransitions } from 'astro:transitions';
 import { site, legalEntity } from '~/lib/site';
@@ -126,6 +127,12 @@ const pageLd = {
   </head>
 
   <body class="bg-bg text-fg">
+    {gtmId && (
+      <noscript>
+        <iframe src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+      </noscript>
+    )}
     <Nav />
 
     <main id="main" tabindex="-1" class="pt-[var(--nav-h)]">
