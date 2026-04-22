@@ -1,6 +1,8 @@
 ---
 import Icon from '~/components/Icon.astro';
 import Mascot from '~/components/Mascot.astro';
+import { Image } from 'astro:assets';
+import heroImage from '~/assets/brand/generated/hero.png';
 ---
 
 <section class="relative pt-20 pb-24 md:pt-28 md:pb-32 overflow-hidden">
@@ -58,10 +60,20 @@ import Mascot from '~/components/Mascot.astro';
     </div>
 
     <div class="md:col-span-4 reveal">
-      <div class="relative flex items-center justify-center">
-        <div aria-hidden="true" class="absolute inset-0 blur-3xl opacity-60
-                    bg-[radial-gradient(circle_at_center,rgb(var(--color-brand)/0.35),transparent_65%)]"></div>
-        <Mascot size={280} priority alt="Glitch Executor cyber cobra mascot" />
+      <div class="relative">
+        <div aria-hidden="true" class="absolute inset-0 blur-3xl opacity-50
+                    bg-[radial-gradient(circle_at_center,rgb(var(--color-brand)/0.30),transparent_65%)]"></div>
+        <Image
+          src={heroImage}
+          alt="Glitch Executor holding-company illustration: Trade, Edge, and Grow as interconnected panels orbiting a shared AI core"
+          widths={[480, 768, 1024]}
+          sizes="(min-width: 768px) 400px, 100vw"
+          loading="eager"
+          class="relative rounded-lg shadow-glow-brand w-full h-auto"
+        />
+        <div class="absolute -bottom-6 -left-6 hidden sm:block">
+          <Mascot size={72} priority alt="Glitch Executor cobra mascot" />
+        </div>
       </div>
     </div>
   </div>
