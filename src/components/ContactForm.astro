@@ -122,6 +122,16 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
           body: fd,
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        // Track the conversion before navigating away so GTM/GA4/Meta
+        // have time to queue the event via sendBeacon.
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: 'lead_submit',
+          form_name: 'contact',
+          form_location: window.location.pathname,
+        });
+
         window.location.href = '/thanks';
       } catch (err) {
         submit.disabled = false;
