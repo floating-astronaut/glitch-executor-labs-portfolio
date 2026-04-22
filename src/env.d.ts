@@ -9,6 +9,7 @@ interface ImportMetaEnv {
   readonly PUBLIC_UMAMI_WEBSITE_ID?: string;
   readonly PUBLIC_UMAMI_SRC?: string;
   readonly PUBLIC_GA_MEASUREMENT_ID?: string;
+  readonly PUBLIC_META_PIXEL_ID?: string;
 }
 
 interface ImportMeta {
