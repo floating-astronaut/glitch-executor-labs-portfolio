@@ -35,8 +35,8 @@ const year = new Date().getFullYear();
             </a>
           </li>
         ))}
-        <li><a class="hover:text-fg" href="/#how">How we work</a></li>
-        <li><a class="hover:text-fg" href="/#contact">Contact</a></li>
+        <li><a class="flex items-center min-h-11 hover:text-fg" href="/#how">How we work</a></li>
+        <li><a class="flex items-center min-h-11 hover:text-fg" href="/#contact">Contact</a></li>
       </ul>
     </nav>
 
@@ -44,7 +44,7 @@ const year = new Date().getFullYear();
       <h3 class="eyebrow mb-4">Legal</h3>
       <ul class="space-y-2 text-muted">
         {legalNav.map((l) => (
-          <li><a class="hover:text-fg" href={l.href}>{l.label}</a></li>
+          <li><a class="flex items-center min-h-11 hover:text-fg" href={l.href}>{l.label}</a></li>
         ))}
         <li>
           <a class="hover:text-fg inline-flex items-center gap-1" href={`mailto:${site.contactEmail}`}>

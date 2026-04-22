@@ -34,7 +34,6 @@ const { pathname } = Astro.url;
 
     <nav aria-label="Primary" class="hidden md:flex items-center gap-7 text-fluid-sm text-muted">
       {nav.map((item) => {
-        // Match if the path (minus hash) is a prefix of the current URL.
         const bare = item.href.split('#')[0] || '/';
         const active = bare !== '/' && pathname.startsWith(bare);
         return (
@@ -51,17 +50,109 @@ const { pathname } = Astro.url;
 
     <a
       href="/#contact"
-      class="btn btn-ghost text-fluid-sm"
+      class="btn btn-ghost text-fluid-sm hidden md:inline-flex"
       data-cta="nav-contact"
     >
-      Get in touch
+      Book a call
       <Icon name="arrow-up-right" size={16} />
     </a>
+
+    {/* Mobile hamburger — visible only below md breakpoint */}
+    <button
+      id="mobile-nav-toggle"
+      type="button"
+      class="md:hidden inline-flex items-center justify-center min-w-[44px] min-h-[44px] -mr-1 rounded-md text-fg hover:text-brand focus-visible:ring-2 focus-visible:ring-brand"
+      aria-label="Open navigation menu"
+      aria-expanded="false"
+      aria-controls="mobile-nav-drawer"
+    >
+      <svg
+        width="24" height="24" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path data-ham-lines d="M4 7h16M4 12h16M4 17h16" />
+        <path data-ham-x class="hidden" d="M6 6l12 12M6 18L18 6" />
+      </svg>
+    </button>
   </div>
 </header>
 
+{/* Mobile drawer — sibling of <header>, positioned below it */}
+<div
+  id="mobile-nav-drawer"
+  class="md:hidden fixed inset-x-0 bottom-0 z-40 hidden flex-col overscroll-contain"
+  style={`top: var(--nav-h); background: rgb(var(--color-bg) / 0.98); backdrop-filter: blur(20px);`}
+  aria-hidden="true"
+>
+  <nav aria-label="Mobile primary" class="container-app pt-4 flex flex-col divide-y divide-border/50">
+    {nav.map((item) => {
+      const bare = item.href.split('#')[0] || '/';
+      const active = bare !== '/' && pathname.startsWith(bare);
+      return (
+        <a
+          href={item.href}
+          class="flex items-center justify-between min-h-[56px] text-fluid-xl font-medium hover:text-brand transition-colors"
+          aria-current={active ? 'page' : undefined}
+          data-mobile-nav-link
+        >
+          <span>{item.label}</span>
+          <Icon name="arrow-up-right" size={18} class="text-subtle" />
+        </a>
+      );
+    })}
+  </nav>
+  <div class="container-app mt-6 pb-8">
+    <a
+      href="/#contact"
+      class="btn btn-primary w-full justify-center"
+      data-mobile-nav-link
+    >
+      Book a call
+      <Icon name="arrow-up-right" size={16} />
+    </a>
+  </div>
+</div>
+
 <script>
-  // Elevate nav shadow once the user scrolls past the hero.
+  const toggle = document.getElementById('mobile-nav-toggle');
+  const drawer = document.getElementById('mobile-nav-drawer');
+
+  function setDrawer(open: boolean): void {
+    if (!toggle || !drawer) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    drawer.setAttribute('aria-hidden', String(!open));
+    drawer.classList.toggle('hidden', !open);
+    drawer.classList.toggle('flex', open);
+    document.body.classList.toggle('overflow-hidden', open);
+    const lines = toggle.querySelector('[data-ham-lines]');
+    const x     = toggle.querySelector('[data-ham-x]');
+    if (lines && x) {
+      lines.classList.toggle('hidden', open);
+      x.classList.toggle('hidden', !open);
+    }
+  }
+
+  if (toggle && drawer) {
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      setDrawer(!open);
+    });
+    drawer.querySelectorAll('[data-mobile-nav-link]').forEach((link) => {
+      link.addEventListener('click', () => setDrawer(false));
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setDrawer(false);
+    });
+    // Close on viewport crossing md breakpoint — Astro's View Transitions
+    // can leave drawer state stale otherwise.
+    const mq = window.matchMedia('(min-width: 768px)');
+    mq.addEventListener('change', (e) => {
+      if (e.matches) setDrawer(false);
+    });
+  }
+
+  // Elevate nav shadow once scrolled past hero.
   const nav = document.getElementById('site-nav');
   if (nav) {
     const onScroll = () => {
