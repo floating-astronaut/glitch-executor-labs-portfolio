@@ -29,7 +29,7 @@ const year = new Date().getFullYear();
       <ul class="space-y-2 text-muted">
         {subBrands.map((b) => (
           <li>
-            <a class="hover:text-fg inline-flex items-center gap-1" href={b.href} rel="noopener">
+            <a class="hover:text-fg inline-flex items-center gap-1 min-h-11" href={b.href} rel="noopener">
               {b.name}
               <Icon name="arrow-up-right" size={14} />
             </a>
@@ -47,7 +47,7 @@ const year = new Date().getFullYear();
           <li><a class="flex items-center min-h-11 hover:text-fg" href={l.href}>{l.label}</a></li>
         ))}
         <li>
-          <a class="hover:text-fg inline-flex items-center gap-1" href={`mailto:${site.contactEmail}`}>
+          <a class="hover:text-fg inline-flex items-center gap-1 min-h-11" href={`mailto:${site.contactEmail}`}>
             {site.contactEmail}
             <Icon name="arrow-up-right" size={14} />
           </a>
