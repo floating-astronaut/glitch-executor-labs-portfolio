@@ -1,7 +1,6 @@
 ---
 const gtmId = import.meta.env.PUBLIC_GTM_CONTAINER_ID ?? '';
 import '~/styles/global.css';
-import { ViewTransitions } from 'astro:transitions';
 import { site, legalEntity } from '~/lib/site';
 import Nav from '~/components/Nav.astro';
 import Footer from '~/components/Footer.astro';
@@ -118,7 +117,6 @@ const pageLd = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
-    <ViewTransitions />
 
     <JsonLd data={[orgLd, siteLd, pageLd]} />
     <Analytics />
