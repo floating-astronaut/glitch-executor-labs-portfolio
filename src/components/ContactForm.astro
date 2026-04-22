@@ -123,6 +123,17 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
+        // Read event_id from the server response so client-side Meta
+        // Pixel and server-side Conversions API share the same ID and
+        // Meta can dedupe.
+        let eventId: string | undefined;
+        try {
+          const body = await res.clone().json() as { event_id?: string };
+          eventId = body.event_id;
+        } catch {
+          eventId = undefined;
+        }
+
         // Track the conversion before navigating away so GTM/GA4/Meta
         // have time to queue the event via sendBeacon.
         window.dataLayer = window.dataLayer || [];
@@ -130,6 +141,7 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
           event: 'lead_submit',
           form_name: 'contact',
           form_location: window.location.pathname,
+          event_id: eventId,
         });
 
         window.location.href = '/thanks';

@@ -19,6 +19,10 @@
  *                           branded thank-you email. Off by default.
  *   SLACK_WEBHOOK_URL     — optional; POSTs a formatted Block Kit message.
  *   CONTACT_FORWARD_URL   — optional; POSTs raw JSON to any endpoint.
+ *   META_CAPI_TOKEN       — Meta Conversions API token (encrypted).
+ *   META_PIXEL_ID         — per-site pixel ID for the CAPI call (server-only).
+ *   META_TEST_EVENT_CODE  — optional; include to route events to
+ *                           Events Manager → Test Events (staging).
  *
  * No third-party SDKs — just `fetch` — so the worker stays under the Cloudflare
  * free-tier CPU budget on a cold start.
@@ -41,6 +45,9 @@ export interface Env {
   RESEND_AUTOREPLY?: string;
   SLACK_WEBHOOK_URL?: string;
   CONTACT_FORWARD_URL?: string;
+  META_CAPI_TOKEN?: string;
+  META_PIXEL_ID?: string;
+  META_TEST_EVENT_CODE?: string;
 }
 
 interface FormFields extends ContactPayload {
@@ -50,6 +57,7 @@ interface FormFields extends ContactPayload {
 const MAX_LEN = { name: 200, email: 200, company: 200, message: 4000 } as const;
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+  const eventId = crypto.randomUUID();
   const contentType = request.headers.get('content-type') ?? '';
   let form: FormData;
   try {
@@ -86,8 +94,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     if (!ok) return json({ ok: false, error: 'turnstile-failed' }, 403);
   }
 
-  await forward(payload, env, request);
-  return json({ ok: true });
+  await forward(payload, env, request, eventId);
+  return json({ ok: true, event_id: eventId });
 };
 
 function jsonToForm(obj: unknown): FormData {
@@ -123,7 +131,7 @@ async function verifyTurnstile(token: string, secret: string, ip: string): Promi
   return data.success === true;
 }
 
-async function forward(p: FormFields, env: Env, req: Request): Promise<void> {
+async function forward(p: FormFields, env: Env, req: Request, eventId: string): Promise<void> {
   const ref = req.headers.get('referer') ?? '';
   const ua  = req.headers.get('user-agent') ?? '';
   const ip  = clientIp(req);
@@ -204,6 +212,42 @@ async function forward(p: FormFields, env: Env, req: Request): Promise<void> {
     }));
   }
 
+
+  // ── Meta Conversions API (server-side Lead event) ──────────────────────
+  if (env.META_CAPI_TOKEN && env.META_PIXEL_ID) {
+    const emHash = p.email ? await sha256Hex(p.email.toLowerCase().trim()) : undefined;
+    const userData: Record<string, unknown> = {};
+    if (emHash) userData.em = [emHash];
+    if (ip)     userData.client_ip_address = ip;
+    if (ua)     userData.client_user_agent = ua;
+    const capiBody: Record<string, unknown> = {
+      data: [{
+        event_name: 'Lead',
+        event_time: Math.floor(Date.now() / 1000),
+        action_source: 'website',
+        event_source_url: ref || `https://${site}/`,
+        event_id: eventId,
+        user_data: userData,
+        custom_data: {
+          content_name: 'contact',
+          content_category: site,
+          form_location: ref || '/',
+        },
+      }],
+      access_token: env.META_CAPI_TOKEN,
+    };
+    if (env.META_TEST_EVENT_CODE) capiBody.test_event_code = env.META_TEST_EVENT_CODE;
+
+    tasks.push(fetch(
+      `https://graph.facebook.com/v19.0/${env.META_PIXEL_ID}/events`,
+      {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(capiBody),
+      },
+    ));
+  }
+
   await Promise.allSettled(tasks);
 }
 
@@ -233,4 +277,11 @@ function json(data: unknown, status = 200): Response {
     status,
     headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' },
   });
+}
+
+async function sha256Hex(s: string): Promise<string> {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(buf))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
 }
