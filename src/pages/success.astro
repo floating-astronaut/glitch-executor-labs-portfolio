@@ -1,0 +1,69 @@
+---
+import Base from '~/layouts/Base.astro';
+import Icon from '~/components/Icon.astro';
+import Mascot from '~/components/Mascot.astro';
+---
+
+<Base
+  title="Subscription confirmed"
+  description="Your GlitchExecutor subscription is active."
+  noindex
+  pageType="WebPage"
+>
+  <section class="container-app min-h-[60vh] flex items-center py-24">
+    <div class="grid gap-6 max-w-xl reveal">
+      <Mascot size={72} priority alt="" />
+      <p class="eyebrow"><Icon name="check" size={14} /> Payment confirmed</p>
+      <h1 id="success-heading">Welcome aboard — your subscription is active.</h1>
+      <p class="text-fluid-lg text-muted" id="success-detail">
+        We're activating your account now. Check Telegram for your welcome
+        message, or reply to the email receipt if anything looks off.
+      </p>
+      <div class="flex gap-3">
+        <a href="https://t.me/GlitchExecutorBot" class="btn btn-primary">
+          Open the bot <Icon name="arrow-up-right" size={16} />
+        </a>
+        <a href="/" class="btn btn-ghost">
+          Back to home <Icon name="arrow-right" size={16} />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!--
+    Browser-side Purchase fire — pairs with server-side Conversions API
+    (payment/server.py:send_meta_capi_purchase) via shared event_id `pur_<sid>`.
+    Meta dedupes on event_id, so both signals combine for Event Match Quality
+    without double-counting.
+  -->
+  <script is:inline>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var sid = params.get('session_id');
+      if (!sid) return;
+
+      fetch('/api/stripe/session-status?session_id=' + encodeURIComponent(sid))
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (!data || !data.purchase) return;
+          var p = data.purchase;
+
+          if (typeof window.fbq === 'function') {
+            window.fbq(
+              'track',
+              'Purchase',
+              { value: p.value, currency: p.currency || 'USD' },
+              { eventID: p.event_id }
+            );
+          }
+
+          if (data.tier) {
+            var h = document.getElementById('success-heading');
+            if (h) h.textContent = 'Welcome to GlitchExecutor ' +
+              data.tier.charAt(0).toUpperCase() + data.tier.slice(1) + '.';
+          }
+        })
+        .catch(function () { /* non-fatal: server-side CAPI still fires */ });
+    })();
+  </script>
+</Base>
