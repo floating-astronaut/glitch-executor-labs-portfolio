@@ -13,7 +13,13 @@ Body text (if present) shown as indented sub-bullets.
 
 ## 2026-05-15
 
-- **02:04 UTC** — feat(checkout): add /success page with browser-side Purchase fire (`bd2f6ed`) — 2 files
+- **03:04 UTC** — ci: suppress GitLab pipelines (workflow rules: when never) (`809a32a`) — 2 files
+    CF Pages deploys this repo via its own GitLab git integration — there's
+    no work for GitLab CI to do. But GitLab was auto-creating a pipeline
+    on every push (Auto-DevOps or group-level template), surfacing as a
+    running/failing job. A workflow rule with when: never prevents pipeline
+    creation entirely so no runner minutes are spent.
+- **02:18 UTC** — feat(checkout): add /success page with browser-side Purchase fire (`b845859`) — 2 files
     Pairs with payment/server.py:send_meta_capi_purchase via shared event_id
     `pur_<session_id>` so Meta dedupes browser + CAPI signals into one Purchase
     event with maximum Event Match Quality.
