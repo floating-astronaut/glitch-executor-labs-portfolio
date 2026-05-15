@@ -11,9 +11,16 @@ Body text (if present) shown as indented sub-bullets.
 
 ---
 
+## 2026-05-16
+
+- **02:48 UTC** — ci: remove stub .gitlab-ci.yml (`4f4d7c4`) — 2 files
+    Project CI/CD is now fully disabled at the project level
+    (builds_access_level=disabled via GitLab API). The workflow:rules
+    stub is redundant and can come out.
+
 ## 2026-05-15
 
-- **03:04 UTC** — ci: suppress GitLab pipelines (workflow rules: when never) (`809a32a`) — 2 files
+- **03:18 UTC** — ci: suppress GitLab pipelines (workflow rules: when never) (`543e32f`) — 2 files
     CF Pages deploys this repo via its own GitLab git integration — there's
     no work for GitLab CI to do. But GitLab was auto-creating a pipeline
     on every push (Auto-DevOps or group-level template), surfacing as a
