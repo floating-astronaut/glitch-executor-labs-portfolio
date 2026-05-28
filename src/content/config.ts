@@ -8,7 +8,7 @@ const blog = defineCollection({
       summary: z.string(),
       // Short tag list shown on cards + detail pages. Keep to 1–3.
       tags: z.array(z.string()).default([]),
-      author: z.string().default('Glitch Executor Labs'),
+      author: z.string().default('Nuraveda Lab'),
       cover: image().optional(),
       coverAlt: z.string().optional(),
       publishedAt: z.coerce.date(),

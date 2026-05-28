@@ -65,7 +65,7 @@ export function ogTemplate({
       <div style="margin-top: 40px; display: flex; align-items: center; justify-content: space-between;
                    font-family: 'Geist Mono', monospace; font-size: 18px; color: #6b7280;">
         <span>© Glitch Executor</span>
-        <span style="color: ${accent};">support@glitchexecutor.com</span>
+        <span style="color: ${accent};">help.nuraveda@gmail.com</span>
       </div>
     </div>
   `;

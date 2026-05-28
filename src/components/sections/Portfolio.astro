@@ -1,22 +1,23 @@
 ---
 import Icon from '~/components/Icon.astro';
-import { subBrands } from '~/lib/site';
+import { flagships } from '~/lib/site';
 ---
 
-<section id="portfolio" class="py-24 md:py-32 border-y border-border/60 bg-surface/30">
+<section id="flagships" class="py-24 md:py-32 border-y border-border/60 bg-surface/30">
   <div class="container-app">
     <div class="max-w-2xl reveal">
-      <p class="eyebrow"><Icon name="layers" size={14} /> Portfolio</p>
-      <h2 class="mt-4">Three product lines. One operating system.</h2>
+      <p class="eyebrow"><Icon name="layers" size={14} /> Flagships</p>
+      <h2 class="mt-4">Two flagships. One operating mode.</h2>
       <p class="mt-5 text-fluid-lg text-muted">
-        Each sub-brand runs on the same shared stack — agent ensemble, shared
-        data layer, shared execution primitives — but ships with a vertical-specific
-        surface area. Pick the one closest to your problem.
+        Glitch Executor is the productized end-to-end execution surface —
+        the moat is the locked playbooks and tuned models.
+        Mesh Pilot is the open agent mesh — the moat is the orchestration
+        brain, not the individual agents. Pick the one closest to your problem.
       </p>
     </div>
 
-    <ul class="mt-14 grid gap-6 md:grid-cols-3" role="list">
-      {subBrands.map((b) => (
+    <ul class="mt-14 grid gap-6 md:grid-cols-2" role="list">
+      {flagships.map((b) => (
         <li class="card p-6 md:p-8 reveal group relative flex flex-col h-full
                    hover:border-brand/40 transition-colors">
           <div aria-hidden="true"
@@ -31,7 +32,7 @@ import { subBrands } from '~/lib/site';
             </span>
             <div>
               <h3 class="text-fluid-xl leading-none">{b.name}</h3>
-              <p class="mt-1 font-mono text-fluid-xs text-subtle">{b.slug}.glitchexecutor.com</p>
+              <p class="mt-1 font-mono text-fluid-xs text-subtle">{b.domainCaption}</p>
             </div>
           </div>
 
@@ -52,7 +53,7 @@ import { subBrands } from '~/lib/site';
               rel="noopener"
               class="inline-flex items-center gap-1.5 text-brand text-fluid-sm font-medium
                      underline decoration-brand/30 hover:decoration-brand min-h-11 py-2"
-              data-cta={`portfolio-${b.slug}`}
+              data-cta={`flagship-${b.slug}`}
             >
               Visit {b.name}
               <Icon name="arrow-up-right" size={14} />

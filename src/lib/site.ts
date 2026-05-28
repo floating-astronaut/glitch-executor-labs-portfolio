@@ -2,16 +2,15 @@
 // Keep this file dependency-free — imported from both server and client code.
 
 export const site = {
-  name: 'Glitch Executor Labs',
-  parent: 'Glitch Executor Labs',
-  domain: 'glitchexecutor.com',
-  url: 'https://glitchexecutor.com',
-  contactEmail: 'support@glitchexecutor.com',
-  tagline: 'AI automation platforms for trading, betting, and e-commerce operators.',
+  name: 'Nuraveda Lab',
+  parent: 'Nuraveda Lab',
+  domain: 'nuraveda.com',
+  url: 'https://nuraveda.com',
+  contactEmail: 'help.nuraveda@gmail.com',
+  tagline: 'AI that ships. In production.',
   description:
-    'Glitch Executor Labs builds AI automation platforms across three verticals — Glitch Trade automates prop-firm trading, Glitch Edge automates sports betting, and Glitch Grow automates Shopify e-commerce.',
+    'Nuraveda Lab is an independent AI lab shipping two flagships — Glitch Executor (trading, betting, and growth automation) and Mesh Pilot (open agent mesh + proprietary orchestration brain) — plus a small set of MIT-licensed open-source projects.',
   ogImage: '/assets/brand/og-image.png',
-  twitter: '@glitchexecutor',
   locale: 'en-US',
 } as const;
 
@@ -24,7 +23,7 @@ export const legalEntity = {
   owner: 'Tejas Karan Agrawal',
   address: '77 Huntley St, Toronto, ON M4Y 2P3, Canada',
   phone: '+1 437 539 7958',
-  email: 'support@glitchexecutor.com',
+  email: 'help.nuraveda@gmail.com',
   jurisdiction: 'Province of Ontario, Canada',
   arbitrationSeat: 'Toronto, Ontario',
   arbitrationRules: 'ADR Institute of Canada, Inc.',
@@ -32,12 +31,13 @@ export const legalEntity = {
 } as const;
 
 export const nav = [
-  { href: '/#portfolio',   label: 'Portfolio' },
-  { href: '/#how',         label: 'How we work' },
-  { href: '/#milestones',  label: 'Milestones' },
-  { href: '/blog',         label: 'Blog' },
-  { href: '/#faq',         label: 'FAQ' },
-  { href: '/#contact',     label: 'Contact' },
+  { href: '/#flagships',    label: 'Flagships' },
+  { href: '/#open-source',  label: 'Open source' },
+  { href: '/#how',          label: 'How we work' },
+  { href: '/#milestones',   label: 'Milestones' },
+  { href: '/blog',          label: 'Blog' },
+  { href: '/#faq',          label: 'FAQ' },
+  { href: '/#contact',      label: 'Contact' },
 ] as const;
 
 export const legalNav = [
@@ -45,45 +45,90 @@ export const legalNav = [
   { href: '/legal/terms',   label: 'Terms' },
 ] as const;
 
-// Sister sites — central source so Nav / Portfolio grid / Footer stay in sync.
-export const subBrands = [
+// Flagship products — Nuraveda Lab ships two end-to-end products.
+// Central source so Nav / Portfolio grid / Footer / JSON-LD stay in sync.
+export const flagships = [
   {
-    slug: 'trade',
-    name: 'Glitch Trade',
-    href: 'https://trade.glitchexecutor.com',
-    tagline: 'Trading automation for prop-firm challenges.',
+    slug: 'glitch-executor',
+    name: 'Glitch Executor',
+    href: 'https://glitchexecutor.com',
+    domainCaption: 'glitchexecutor.com',
+    tagline: 'End-to-end execution platform for trading, sports-betting intelligence, and growth automation.',
     proof: [
-      'cBots engineered to pass FundingPips Zero and similar one-step challenges',
-      'Runs on your own cTrader Desktop — execution stays customer-side, prop-firm TOS-safe',
-      '9-strategy library — trend, momentum, mean-reversion, ML, volume, session, MTF, sentiment, signal aggregation',
+      'Live multi-bot trading ensembles with Oracle-coordinated risk',
+      'Sports-intelligence engines (cricket IPL/PSL, NBA pregame) deployable via programmatic betting APIs',
+      'Growth-side voice agents, attribution bridges, and ad-ops automation',
     ],
     icon: 'chart' as const,
   },
   {
-    slug: 'edge',
-    name: 'Glitch Edge',
-    href: 'https://edge.glitchexecutor.com',
-    tagline: 'Betting automation for quantitative sports bettors.',
+    slug: 'mesh-pilot',
+    name: 'Mesh Pilot',
+    href: 'https://meshpilot.app',
+    domainCaption: 'meshpilot.app',
+    tagline: 'An open agent mesh + a proprietary orchestration brain.',
     proof: [
-      'Pre-match and in-play models for cricket (IPL, PSL) and NBA',
-      'Edge-aware staking automation with paper-first sim harness',
-      'Encrypted broker-key vault — your bookmaker credentials never leave your control',
+      'OSS agents — voice, SEO, ads, sales, social, UGC. Public on github.com/Nuraveda-Labs',
+      'Proprietary brain — routing, scheduling, shared memory, cross-agent policy. Not open.',
+      'Partially open by design — the moat is the coordination plane, not the individual agents.',
     ],
     icon: 'bolt' as const,
   },
+] as const;
+
+// Open-source projects — MIT-licensed work shipped under the lab.
+// Tri-mirrored across GitHub / GitLab / Codeberg (account-suspension safe).
+export const openSource = [
   {
-    slug: 'grow',
-    name: 'Glitch Grow',
-    href: 'https://grow.glitchexecutor.com',
-    tagline: 'Marketing automation for Shopify D2C operators.',
+    slug: 'hydrogen-d2c-starter',
+    name: 'Hydrogen D2C Starter',
+    href: 'https://github.com/Nuraveda-Labs/hydrogen-d2c-starter',
+    demo: 'https://hydrogen.nuraveda.com',
+    tagline: 'Production-grade Shopify Hydrogen + React Router 7 starter for D2C brands.',
     proof: [
-      'Ads agent — Meta ads automation tuned for Shopify D2C brands',
-      'Cross-platform attribution across Meta, Amazon, and Shopify',
-      'COD-confirmation voice AI and theme-as-code multi-store Shopify automation',
+      'CRO-tested PDP / collection / home layouts',
+      'GA4 dataLayer wiring + Pack-style component library',
+      'Hydrogen latest + Vite 6 + TypeScript strict',
     ],
+    license: 'MIT',
+    stack: 'Shopify Hydrogen · React Router 7 · TypeScript',
     icon: 'shopping-cart' as const,
+  },
+  {
+    slug: 'ouroboros-cbot',
+    name: 'Ouroboros cBot',
+    href: 'https://github.com/floating-astronaut/ouroboros-cbot',
+    tagline: 'Multi-timeframe cTrader cBot — six ML bots (M1..H4) merged into one .algo.',
+    proof: [
+      'Data-driven whitelist over 3,253 closed demo trades',
+      'Agreement-as-sizer rule (not agreement-as-gate)',
+      'Customer-side execution — single .algo, runs offline in cTrader Desktop',
+    ],
+    license: 'MIT',
+    stack: 'C# · .NET 8 · cTrader Automate',
+    icon: 'chart' as const,
+  },
+  {
+    slug: 'mesh-pilot-agents',
+    name: 'Mesh Pilot agents',
+    href: 'https://github.com/Nuraveda-Labs',
+    tagline: 'Six open-source AI agents — the publicly forkable half of Mesh Pilot.',
+    proof: [
+      'ai-voice-agent (LiveKit), ai-seo-agent, ai-ads-agent',
+      'ai-social-agent, ai-sales-agent, ai-ugc-agent',
+      'Mirrored on github.com/Nuraveda-Labs, gitlab.com/nuraveda-lab, codeberg.org/Nuraveda_lab',
+    ],
+    license: 'MIT',
+    stack: 'TypeScript · Node · LiveKit · LangGraph',
+    icon: 'layers' as const,
   },
 ] as const;
 
+// Keep `subBrands` as an alias for backward compatibility with any
+// components that still import it (Portfolio / Footer). Maps to flagships.
+export const subBrands = flagships;
+
 export type NavItem = (typeof nav)[number];
-export type SubBrand = (typeof subBrands)[number];
+export type Flagship = (typeof flagships)[number];
+export type OpenSourceProject = (typeof openSource)[number];
+export type SubBrand = Flagship;
