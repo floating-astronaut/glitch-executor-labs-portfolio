@@ -11,44 +11,46 @@ export interface OgParams {
   bg?: string;    // hex
 }
 
-// Inline SVG cobra badge — keeps the OG card self-contained, no network fetches.
-const cobraBadge = `
-  <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="1.5"
-       stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12 20c-4 0-6-2-6-5s2-4 4-4 3 1 3 2.5-1 2-2 2-1.5-.5-1.5-1" />
-    <path d="M12 20c4 0 6-2 6-5s-2-4-4-4-3 1-3 2.5 1 2 2 2 1.5-.5 1.5-1" />
-    <path d="M12 11V4" />
-    <path d="M10 6c0-1 1-2 2-2s2 1 2 2" />
-    <circle cx="10.5" cy="7.5" r="0.4" fill="#00ff88" />
-    <circle cx="13.5" cy="7.5" r="0.4" fill="#00ff88" />
+// Inline SVG Nuraveda Lab mark — keeps the OG card self-contained, no network
+// fetches. Six rotated "blade" shapes form the hexagonal swirl.
+const markBadge = `
+  <svg width="72" height="72" viewBox="0 0 256 256" fill="${'#7c3aed'}">
+    <g>
+      <path d="M128 30 L168 56 L154 116 L128 102 Z" transform="rotate(0   128 128)"/>
+      <path d="M128 30 L168 56 L154 116 L128 102 Z" transform="rotate(60  128 128)"/>
+      <path d="M128 30 L168 56 L154 116 L128 102 Z" transform="rotate(120 128 128)"/>
+      <path d="M128 30 L168 56 L154 116 L128 102 Z" transform="rotate(180 128 128)"/>
+      <path d="M128 30 L168 56 L154 116 L128 102 Z" transform="rotate(240 128 128)"/>
+      <path d="M128 30 L168 56 L154 116 L128 102 Z" transform="rotate(300 128 128)"/>
+    </g>
   </svg>`;
 
 export function ogTemplate({
-  eyebrow = 'Glitch Executor',
+  eyebrow = 'Nuraveda Lab',
   title,
-  subtitle = 'AI systems that move money, prices, and signals.',
-  accent = '#00ff88',
+  subtitle = 'AI that ships. In production.',
+  accent = '#7c3aed',
   bg = '#0a0a0f',
 }: OgParams) {
   const markup = `
     <div style="
       height: 100%; width: 100%; display: flex; flex-direction: column;
       background: ${bg};
-      background-image: radial-gradient(circle at 80% 10%, rgba(0,255,136,0.18), transparent 55%),
-                        radial-gradient(circle at 10% 90%, rgba(0,136,255,0.15), transparent 55%);
+      background-image: radial-gradient(circle at 80% 10%, rgba(124,58,237,0.22), transparent 55%),
+                        radial-gradient(circle at 10% 90%, rgba(167,139,250,0.14), transparent 55%);
       color: #F5F7FA;
       padding: 72px 80px;
       font-family: 'Inter Tight', sans-serif;
     ">
       <div style="display: flex; align-items: center; gap: 18px;">
-        ${cobraBadge}
+        ${markBadge}
         <div style="display: flex; flex-direction: column;">
           <span style="font-family: 'Geist Mono', monospace; font-size: 20px; letter-spacing: 0.1em;
                         text-transform: uppercase; color: ${accent};">
             ${eyebrow}
           </span>
           <span style="font-size: 20px; color: #9ca3af; margin-top: 4px;">
-            glitchexecutor.com
+            nuraveda.com
           </span>
         </div>
       </div>

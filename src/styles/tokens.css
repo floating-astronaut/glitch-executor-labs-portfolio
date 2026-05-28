@@ -12,13 +12,13 @@
   --color-muted:      203 213 225;   /* slate-300 — WCAG AA on #0a0a0f bg (12:1) */
   --color-subtle:     156 163 175;   /* slate-400 — WCAG AA on #0a0a0f bg (6.9:1) */
 
-  --color-brand:        0 255 136;   /* neon #00ff88 */
-  --color-brand-ink:    6 40 22;
-  --color-electric:     0 136 255;   /* electric blue */
-  --color-accent:     124  58 237;   /* violet */
+  --color-brand:      124  58 237;   /* Nuraveda violet #7c3aed */
+  --color-brand-ink:   30  10  60;   /* deep violet for high-contrast pairings */
+  --color-electric:   167 139 250;   /* light violet #a78bfa for accents */
+  --color-accent:     167 139 250;   /* violet light */
   --color-danger:     248  81  73;
   --color-warn:       250 204  21;
-  --color-ok:           0 255 136;
+  --color-ok:          74 222 128;   /* keep status-green readable */
 
   /* ---- Radii ---- */
   --radius-sm: 6px;
