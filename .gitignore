@@ -20,3 +20,5 @@ playwright/.cache/
 
 # Lighthouse CI
 .lighthouseci/
+*.bak
+public/assets/brand/_old/
