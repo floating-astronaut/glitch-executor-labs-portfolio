@@ -9,9 +9,12 @@ const { pathname } = Astro.url;
 
 <header
   id="site-nav"
-  class="fixed top-0 inset-x-0 z-50 border-b border-border/60 bg-bg/70 backdrop-blur-xl"
+  class="fixed top-0 inset-x-0 z-50"
   style={`transition: background var(--dur) var(--ease-out-expo);`}
 >
+  <div
+    class="mx-auto mt-2 w-[min(calc(100%-1rem),var(--container-max))] rounded-2xl border border-border/60 bg-[linear-gradient(180deg,rgb(var(--color-bg)/0.82),rgb(var(--color-surface)/0.68))] shadow-[0_18px_44px_-28px_rgba(0,0,0,0.85)] backdrop-blur-xl"
+  >
   <div class="container-app flex h-[var(--nav-h)] items-center justify-between">
     <a
       href="/"
@@ -75,6 +78,7 @@ const { pathname } = Astro.url;
         <path data-ham-x class="hidden" d="M6 6l12 12M6 18L18 6" />
       </svg>
     </button>
+  </div>
   </div>
 </header>
 
