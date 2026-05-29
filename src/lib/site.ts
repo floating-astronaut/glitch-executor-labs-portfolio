@@ -77,7 +77,7 @@ export const flagships = [
 ] as const;
 
 // Open-source projects — MIT-licensed work shipped under the lab.
-// Tri-mirrored across GitHub / GitLab / Codeberg (account-suspension safe).
+// Mirrored across GitHub + GitLab (account-suspension safe).
 export const openSource = [
   {
     slug: 'hydrogen-d2c-starter',
