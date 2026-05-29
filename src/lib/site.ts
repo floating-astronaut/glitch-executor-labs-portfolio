@@ -133,7 +133,7 @@ export const openSource = [
       'Read + write: campaigns, groups, analytics; write tools default to DRAFT',
       'pip install linkedin-ads-mcp · or connect instantly via Mesh Pilot',
     ],
-    license: 'MIT',
+    license: 'FSL-1.1-MIT',
     stack: 'Python · FastMCP · LinkedIn Marketing API',
     icon: 'link' as const,
   },
