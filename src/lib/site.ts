@@ -116,11 +116,26 @@ export const openSource = [
     proof: [
       'ai-voice-agent (LiveKit), ai-seo-agent, ai-ads-agent',
       'ai-social-agent, ai-sales-agent, ai-ugc-agent',
-      'Mirrored on github.com/Nuraveda-Labs, gitlab.com/nuraveda-lab, codeberg.org/Nuraveda_lab',
+      'Mirrored on github.com/Nuraveda-Labs and gitlab.com/nuraveda-lab',
     ],
     license: 'MIT',
     stack: 'TypeScript · Node · LiveKit · LangGraph',
     icon: 'layers' as const,
+  },
+  {
+    slug: 'linkedin-ads-mcp',
+    name: 'LinkedIn Ads MCP',
+    href: 'https://github.com/Nuraveda-Labs/linkedin-ads-mcp',
+    demo: 'https://pypi.org/project/linkedin-ads-mcp/',
+    tagline: 'MCP server for the LinkedIn Marketing API — read + write campaigns, analytics, creatives from any MCP client.',
+    proof: [
+      'No official LinkedIn MCP exists — this handles the restli encoding quirks',
+      'Read + write: campaigns, groups, analytics; write tools default to DRAFT',
+      'pip install linkedin-ads-mcp · or connect instantly via Mesh Pilot',
+    ],
+    license: 'MIT',
+    stack: 'Python · FastMCP · LinkedIn Marketing API',
+    icon: 'link' as const,
   },
 ] as const;
 
