@@ -9,7 +9,7 @@ export const site = {
   contactEmail: 'help.nuraveda@gmail.com',
   tagline: 'AI that ships. In production.',
   description:
-    'Nuraveda Lab is an independent AI lab shipping two flagships — Glitch Executor (trading, betting, and growth automation) and Mesh Pilot (open agent mesh + proprietary orchestration brain) — plus a small set of MIT-licensed open-source projects.',
+    'Nuraveda Lab is an independent AI lab shipping two flagships — Glitch Executor (a prop-firm trading dashboard: challenge tracking, a strategy builder, and a rule-aware backtester) and Mesh Pilot (open agent mesh + proprietary orchestration brain) — plus a small set of open-source projects.',
   ogImage: '/assets/brand/og-image.png',
   locale: 'en-US',
 } as const;
@@ -53,11 +53,11 @@ export const flagships = [
     name: 'Glitch Executor',
     href: 'https://glitchexecutor.com',
     domainCaption: 'glitchexecutor.com',
-    tagline: 'End-to-end execution platform for trading, sports-betting intelligence, and growth automation.',
+    tagline: 'Prop-firm trading dashboard — track your challenges, build and test strategies, all your connected accounts in one view.',
     proof: [
-      'Live multi-bot trading ensembles with Oracle-coordinated risk',
-      'Sports-intelligence engines (cricket IPL/PSL, NBA pregame) deployable via programmatic betting APIs',
-      'Growth-side voice agents, attribution bridges, and ad-ops automation',
+      'Track every prop-firm challenge in real time — drawdown, targets, daily limits',
+      'One dashboard unifying all your connected prop / broker accounts',
+      'Strategy builder + backtester that\'s aware of each firm\'s rule set',
     ],
     icon: 'chart' as const,
   },
