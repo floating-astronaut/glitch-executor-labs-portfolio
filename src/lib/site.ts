@@ -137,6 +137,20 @@ export const openSource = [
     stack: 'Python · FastMCP · LinkedIn Marketing API',
     icon: 'link' as const,
   },
+  {
+    slug: 'shopify-agentic-seo-app',
+    name: 'Shopify Agentic SEO App',
+    href: 'https://github.com/Nuraveda-Labs/shopify-agentic-seo-app',
+    tagline: 'Open framework for building an agentic SEO app for Shopify — audits, JSON-LD automation, AI-search readiness.',
+    proof: [
+      'One-click SEO audit: structured data, breadcrumbs, canonical, og:image',
+      'Product JSON-LD + FAQPage / BreadcrumbList via theme app embeds',
+      'Generates llms.txt — readable by AI answer engines. The Shopify surface of Mesh Pilot\'s SEO agent.',
+    ],
+    license: 'MIT',
+    stack: 'React Router 7 · Shopify App · Prisma · Polaris',
+    icon: 'shopping-cart' as const,
+  },
 ] as const;
 
 // Keep `subBrands` as an alias for backward compatibility with any
